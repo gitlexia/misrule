@@ -155,4 +155,7 @@ const server=http.createServer(async(req,res)=>{
   if(!file.startsWith(ROOT+path.sep)||path.basename(file).startsWith('.')||['.env','.mjs','.command'].includes(path.extname(file))||file===path.join(ROOT,'README.md'))return respond(res,403,{error:'Forbidden'});
   try{const st=fs.statSync(file);if(!st.isFile())throw Error('Not file');res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream','Cache-Control':'no-store'});if(req.method==='HEAD')res.end();else fs.createReadStream(file).pipe(res)}catch{return respond(res,404,{error:'Not found'})}
 });
-server.listen(PORT,'127.0.0.1',()=>console.log(`MISRULE / DRIFT → http://localhost:${PORT}\nAI: ${KEY?MODEL+' / '+QUALITY:'DEMO MODE — no API key'}\nSession cap: ${LIMIT} image generations.`));
+server.listen(
+  PORT,
+  process.env.PORT ? '0.0.0.0' : '127.0.0.1',
+  () => console.log(`MISRULE / DRIFT → http://localhost:${PORT}\nAI: ${KEY?MODEL+' / '+QUALITY:'DEMO MODE — no API key'}\nSession cap: ${LIMIT} image generations.`));
