@@ -141,7 +141,7 @@ const server=http.createServer(async(req,res)=>{
   if(pathname==='/api/generate'&&req.method==='POST'){
     // This check helps prevent accidental browser cross-origin requests. It is not authentication.
     const origin=req.headers.origin;
-    if(origin&&!['http://localhost:'+PORT,'http://127.0.0.1:'+PORT].includes(origin))return respond(res,403,{error:'AI generation is restricted to this local studio.'});
+    if (origin && !['http://localhost:' + PORT,'http://127.0.0.1:' + PORT, process.env.MISRULE_PUBLIC_ORIGIN].includes(origin))return respond(res,403,{error:'AI generation is restricted to this local studio.'});
     let raw='';
     try{
       for await(const chunk of req){raw+=chunk;if(raw.length>18_000_000)throw Object.assign(Error('Request too large.'),{status:413})}
